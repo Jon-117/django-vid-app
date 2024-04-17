@@ -43,36 +43,48 @@ class TestAddVideos(TestCase):
         self.assertEqual('yoga for neck and shoulders', video.notes)
         self.assertEqual('4vTJHUDB5ak', video.video_id)
 
-    # def test_video_invalid_url_not_added(self):
-    #     invalid_video_urls = [
-    #         'https://www.randomsite.com/explore',
-    #         'https://www.vidworld.com/show?query=nothing',
-    #         'https://www.mysterydomain.com/unknown?params=404',
-    #         'https://www.fictionalhost.com/vid?p=',
-    #         'https://www.fantasyhub.com',
-    #         'https://www.academiafantastica.edu',
-    #         'https://www.minneapolis.edu/?v=xyztalk'
-    #     ]
-    #
-    #     for invalid_video_url in invalid_video_urls:
-    #         new_video = {
-    #             'name': 'example',
-    #             'url': invalid_video_url,
-    #             'notes': 'example notes'
-    #         }
-    #         url = reverse('add_video')
-    #         response = self.client.post(url, new_video)
-    #
-    #         self.assertTemplateUsed('video_collection/add.html')
-    #
-    #         messages = response.context['messages']
-    #         #  same messages that appear when erroring in the add.html
-    #         message_texts = [message.message for message in messages]
-    #
-    #         self.assertIn('Invalid YouTube URL', message_texts)
-    #
-    #         video_count = Video.objects.count()
-    #         self.assertEqual(video_count, 0)
+    def test_video_invalid_url_not_added(self):
+        invalid_video_urls = [
+            'https://www.randomsite.com/explore',
+            'https://www.vidworld.com/show?query=nothing',
+            'https://www.mysterydomain.com/unknown?params=404',
+            'https://www.fictionalhost.com/vid?p=',
+            'https://www.fantasyhub.com',
+            'https://www.academiafantastica.edu',
+            'https://www.minneapolis.edu/?v=xyztalk'
+        ]
+
+        for invalid_video_url in invalid_video_urls:
+            new_video = {
+                'name': 'example',
+                'url': invalid_video_url,
+                'notes': 'example notes'
+            }
+            url = reverse('add_video')
+            response = self.client.post(reverse('add_video'), new_video, follow=True)
+
+            self.assertTemplateUsed('video_collection/add.html')
+
+            self.assertEqual(200, response.status_code)
+
+            # if response.context:
+            #     for message in response.context['messages']:
+            #         print(message)
+
+            messages = response.context['messages']
+            #  same messages that appear when erroring in the add.html
+            message_texts = [message.message for message in messages]
+            print('message_texts start print')
+            for message_text in message_texts:
+
+                print(message_text)
+            print('message_texts end print')
+
+            # self.assertIn('Invalid YouTube URL', message_texts)
+            self.assertIn('Invalid, check your input!', message_texts)
+
+            video_count = Video.objects.count()
+            self.assertEqual(video_count, 0)
 
 class TestVideoList(TestCase):
     pass
