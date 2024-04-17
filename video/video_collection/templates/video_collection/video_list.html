@@ -3,14 +3,28 @@
 {% block content %}
 
 <h2>Vid List</h2>
+<h3>Search Vids</h3>
+<form method="get" action="{% url 'video_list' %}">
+{{search_form}} <!-- don't need csrf token because this is a get request -->
+    <button type="submit">Search</button>
+</form>
+
+<a href="{% url 'video_list' %}"><button>Clear Search</button></a>
+
+<h3>{{videos|length}} video{{videos|length|pluralize}}</h3>
 
 {% for video in videos %}
 
 <div>
     <h3>{{video.name}}</h3>
     <p>{{video.notes}}</p>
-    <a href="{{video.url}}">Link</a>
+    <iframe width="315" height="240" src="https://youtube.com/embed/{{video.video_id}}"></iframe>
+    <p><a href="{{video.url}}">Link</a></p>
 </div>
+
+{% empty %}
+
+<p>No vids found</p>
 
 {% endfor %}
 

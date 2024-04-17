@@ -1,0 +1,8 @@
+.navigation {
+    margin: 10px
+}
+
+.navigation > a {
+    margin: 10px;
+    color: aqua;
+}
