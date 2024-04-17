@@ -30,10 +30,10 @@ def add(request):
 
 
         messages.warning(request, 'Invalid, check your input!')
-        return render(request, 'video_collection/add.html', {'form': new_video_form})
+        return render(request, 'video_collection/add.html', {'new_video_form': new_video_form})
 
     new_video_form = VideoForm()
-    return render(request, 'video_collection/add.html', {'new_video_form':new_video_form})
+    return render(request, 'video_collection/add.html', {'new_video_form': new_video_form})
 
 
 def video_list(request):
